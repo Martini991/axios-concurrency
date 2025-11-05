@@ -1,62 +1,55 @@
-const ConcurrencyManager = (axios, MAX_CONCURRENT = 10) => {
-  if (MAX_CONCURRENT < 1)
-    throw "Concurrency Manager Error: minimun concurrent requests is 1";
-  let instance = {
-    queue: [],
-    running: [],
-    shiftInitial: () => {
-      setTimeout(() => {
-        if (instance.running.length < MAX_CONCURRENT) {
-          instance.shift();
-        }
-      }, 0);
-    },
-    push: reqHandler => {
-      instance.queue.push(reqHandler);
-      instance.shiftInitial();
-    },
-    shift: () => {
-      if (instance.queue.length) {
-        const queued = instance.queue.shift();
-        queued.resolver(queued.request);
-        instance.running.push(queued);
-      }
-    },
-    // Use as interceptor. Queue outgoing requests
-    requestHandler: req => {
-      return new Promise(resolve => {
-        instance.push({ request: req, resolver: resolve });
-      });
-    },
-    // Use as interceptor. Execute queued request upon receiving a response
-    responseHandler: res => {
-      instance.running.shift();
-      instance.shift();
-      return res;
-    },
-    responseErrorHandler: res => {
-      return Promise.reject(instance.responseHandler(res));
-    },
+class RequestsQueue {
+  static DEFAULT_MAX_CONCURRENT_REQUESTS = 10
+
+  constructor(maxConcurrentRequests = RequestsQueue.DEFAULT_MAX_CONCURRENT_REQUESTS) {
+    if (maxConcurrentRequests < 1) throw new Error('Error: RequestsQueue minimum maxConcurrentRequests is 1')
+
+    this.maxConcurrentRequests = maxConcurrentRequests
+
+    this.queue = []
+    this.running = 0
+  }
+
+  tryRunNext = () => {
+    if (this.running >= this.maxConcurrentRequests) return
+
+    const request = this.queue.shift()
+    if (request === undefined) return
+
+    request.resolve(request.config)
+    this.running++
+  }
+
+  enqueue = (config) => {
+    return new Promise((resolve) => {
+      this.queue.push({ config, resolve })
+      setTimeout(() => this.tryRunNext(), 0)
+    })
+  }
+
+  onFinished = (result) => {
+    this.running--
+    this.tryRunNext()
+    return result
+  }
+}
+
+export function ConcurrencyManager(axios, MAX_CONCURRENT) {
+  const requestsQueue = new RequestsQueue(MAX_CONCURRENT)
+
+  const instance = {
     interceptors: {
-      request: null,
-      response: null
+      request: axios.interceptors.request.use(requestsQueue.enqueueRequest),
+      response: axios.interceptors.response.use(
+        (response) => requestsQueue.onFinished(response),
+        (error) => Promise.reject(requestsQueue.onFinished(error)),
+      ),
     },
     detach: () => {
-      axios.interceptors.request.eject(instance.interceptors.request);
-      axios.interceptors.response.eject(instance.interceptors.response);
-    }
-  };
-  // queue concurrent requests
-  instance.interceptors.request = axios.interceptors.request.use(
-    instance.requestHandler
-  );
-  instance.interceptors.response = axios.interceptors.response.use(
-    instance.responseHandler,
-    instance.responseErrorHandler,
-  );
-  return instance;
-};
+      axios.interceptors.request.eject(instance.interceptors.request)
+      axios.interceptors.response.eject(instance.interceptors.response)
+    },
+  }
 
-module.exports = {
-  ConcurrencyManager
-};
+  return instance
+}

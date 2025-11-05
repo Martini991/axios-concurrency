@@ -1,23 +1,58 @@
 {
   "name": "axios-concurrency",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Gives easy control of how many requests an axios instance makes concurrently. Useful for dealing with rate limiting. Implemented using interceptors.",
-  "main": "index.js",
-  "scripts": {
-    "test": "node test.js"
+  "keywords": [
+    "axios",
+    "concurrency",
+    "rate-limiting",
+    "throttling"
+  ],
+  "homepage": "https://github.com/bernawil/axios-concurrency#readme",
+  "bugs": {
+    "url": "https://github.com/bernawil/axios-concurrency/issues"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/bernawil/axios-concurrency"
   },
-  "keywords": [
-    "axios",
-    "concurrency"
-  ],
-  "author": "Bernardo Wilberger",
   "license": "MIT",
-  "dependencies": {
-    "axios": "^0.21.1"
+  "author": "Bernardo Wilberger",
+  "contributors": [
+    {
+      "name": "Lorenzo Martini",
+      "url": "https://github.com/Martini991"
+    }
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js"
+    }
   },
-  "devDependencies": {}
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "npm run format && npm run lint",
+    "sort": "npx sort-package-json",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "axios": "^1.13.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2"
+  },
+  "engines": {
+    "node": ">=22.21.1"
+  }
 }

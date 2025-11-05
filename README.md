@@ -1,39 +1,33 @@
 # Axios Concurrency Manager
 
 Get control of concurrent requests of any [axios](https://github.com/axios/axios) instance.
-Implemented using axios interceptors
+Implemented using axios interceptors.
 
 ## Installing
 
-```bash
-$ npm install axios-concurrency
+```shell
+npm install axios-concurrency
 ```
 
 ## Example
 
 ```js
-const { ConcurrencyManager } = require("axios-concurrency");
-const axios = require("axios");
+import axios from 'axios'
+import { ConcurrencyManager } from 'axios-concurrency'
 
-let api = axios.create({
-  baseURL: "http://mypublicapi.com"
-});
+const api = axios.create({
+  baseURL: 'http://mypublicapi.com',
+})
 
-// a concurrency parameter of 1 makes all api requests secuential
-const MAX_CONCURRENT_REQUESTS = 5;
-
-// init your manager.
-const manager = ConcurrencyManager(api, MAX_CONCURRENT_REQUESTS);
+const MAX_CONCURRENT_REQUESTS = 5 // a concurrency parameter of 1 makes all api requests sequential
+const manager = ConcurrencyManager(api, MAX_CONCURRENT_REQUESTS) // init concurrency manager
 
 // requests will be sent in batches determined by MAX_CONCURRENT_REQUESTS
-Promise.all(manyIds.map(id => api.get(`/test/${id}`)))
-  .then(responses => {
-    // ...
-  });
+Promise.all(manyIds.map((id) => api.get(`/test/${id}`))).then((responses) => {
+  // ...
+})
 
-// to stop using the concurrency manager.
-// will eject the request and response handlers from your instance
-manager.detach()
+manager.detach() // to stop using the concurrency manager ejecting the request and response handlers from your axios instance
 ```
 
 ## License
