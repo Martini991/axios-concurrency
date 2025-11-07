@@ -16,9 +16,16 @@ class RequestsQueue {
     const request = this.queue.shift()
     if (request === undefined) return
 
+    if (this.isCanceled(request)) {
+      this.tryRunNext()
+      return
+    }
+
     request.resolve(request.config)
     this.running++
   }
+
+  isCanceled = (request) => Boolean(request.config.cancelToken?.reason || request.config.signal?.aborted)
 
   enqueue = (config) => {
     return new Promise((resolve) => {
