@@ -1,6 +1,6 @@
 {
   "name": "@martini991/axios-concurrency",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Gives easy control of how many requests an axios instance makes concurrently. Useful for dealing with rate limiting. Implemented using interceptors.",
   "keywords": [
     "axios",
@@ -32,6 +32,7 @@
     }
   },
   "main": "index.js",
+  "types": "index.d.ts",
   "files": [
     "index.js"
   ],
@@ -45,6 +46,8 @@
     "test": "node test.js"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
     "axios": "^1.13.2",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
