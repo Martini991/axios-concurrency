@@ -16,7 +16,7 @@ npm install @martini991/axios-concurrency
 
 ```js
 import axios from 'axios'
-import { ConcurrencyManager } from 'axios-concurrency'
+import { ConcurrencyManager } from '@martini991/axios-concurrency'
 
 const api = axios.create({
   baseURL: 'http://mypublicapi.com',
