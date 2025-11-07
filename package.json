@@ -1,6 +1,6 @@
 {
-  "name": "axios-concurrency",
-  "version": "2.0.0",
+  "name": "@martini991/axios-concurrency",
+  "version": "1.0.0",
   "description": "Gives easy control of how many requests an axios instance makes concurrently. Useful for dealing with rate limiting. Implemented using interceptors.",
   "keywords": [
     "axios",
@@ -8,13 +8,13 @@
     "rate-limiting",
     "throttling"
   ],
-  "homepage": "https://github.com/bernawil/axios-concurrency#readme",
+  "homepage": "https://github.com/Martini991/axios-concurrency#readme",
   "bugs": {
-    "url": "https://github.com/bernawil/axios-concurrency/issues"
+    "url": "https://github.com/Martini991/axios-concurrency/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bernawil/axios-concurrency"
+    "url": "git+https://github.com/Martini991/axios-concurrency.git"
   },
   "license": "MIT",
   "author": "Bernardo Wilberger",
@@ -52,5 +52,8 @@
   },
   "peerDependencies": {
     "axios": "^1.13.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
