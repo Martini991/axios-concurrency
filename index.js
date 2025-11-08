@@ -46,7 +46,7 @@ export function ConcurrencyManager(axios, MAX_CONCURRENT) {
 
   const instance = {
     interceptors: {
-      request: axios.interceptors.request.use(requestsQueue.enqueueRequest),
+      request: axios.interceptors.request.use((config) => requestsQueue.enqueue(config)),
       response: axios.interceptors.response.use(
         (response) => requestsQueue.onFinished(response),
         (error) => Promise.reject(requestsQueue.onFinished(error)),
