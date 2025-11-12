@@ -1,22 +1,19 @@
 # Axios Concurrency Manager
 
-> **Note:** This repository is a fork of [bernawil/axios-concurrency](https://github.com/bernawil/axios-concurrency).
-> It may include modifications, updates, or maintenance improvements not present in the original version.
-
 Get control of concurrent requests of any [axios](https://github.com/axios/axios) instance.
 Implemented using axios interceptors.
 
 ## Installing
 
 ```shell
-npm install @martini991/axios-concurrency
+npm install axios-concurrency
 ```
 
 ## Example
 
 ```js
 import axios from 'axios'
-import { ConcurrencyManager } from '@martini991/axios-concurrency'
+import { ConcurrencyManager } from 'axios-concurrency'
 
 const api = axios.create({
   baseURL: 'http://mypublicapi.com',
